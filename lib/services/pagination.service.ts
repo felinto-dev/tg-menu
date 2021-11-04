@@ -2,7 +2,7 @@ import * as paginationLogic from 'pagination-logic';
 import { Injectable } from '@nestjs/common';
 import { InlineKeyboardButton } from 'typegram';
 
-import { PaginationSetup } from '../interfaces/pagination-setup';
+import { PaginationSetup } from '../interfaces/pagination-setup.interface';
 
 @Injectable()
 export class PaginationTelegramService {

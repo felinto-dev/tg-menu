@@ -1,12 +1,16 @@
 {
   "name": "@felinto-dev/tg-menu",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "author": "Felinto",
   "license": "MIT",
+	"types": "dist/index.d.ts",
+	"files": [
+    "/dist"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/nestjs/nest"
+    "url": "https://github.com/felinto-dev/tg-menu"
   },
   "scripts": {
     "prebuild": "rimraf dist",

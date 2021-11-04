@@ -17,7 +17,7 @@ import { MenuHelper } from '../helpers/menu.helper';
 @Injectable()
 export class SetupMenuPathInterceptor implements NestInterceptor {
   constructor(
-    private reflector: Reflector,
+    private readonly reflector: Reflector,
     private readonly telegramPaginationService: PaginationTelegramService,
   ) {}
 

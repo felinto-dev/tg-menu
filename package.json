@@ -1,10 +1,13 @@
 {
-  "name": "tg-menu",
+  "name": "@felinto-dev/tg-menu",
   "version": "0.0.1",
   "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "author": "Felinto",
+  "license": "MIT",
+	"repository": {
+    "type": "git",
+    "url": "https://github.com/nestjs/nest"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

@@ -1,7 +1,7 @@
 import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
-import { PaginationTelegramService } from 'lib/services/pagination.service';
+import { PaginationTelegramService } from '../services/pagination.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { PaginationSetup } from '../interfaces/pagination-setup.interface';
 import { MenuPathParser } from './menu-path-parser.helper';

@@ -1,5 +1,6 @@
-import { MenuHelper } from 'lib/helpers/menu.helper';
 import { Scenes } from 'telegraf';
+
+import { MenuHelper } from '../helpers/menu.helper';
 
 export interface TGMenuContext extends Scenes.SceneContext {
   query: Record<string, string>;

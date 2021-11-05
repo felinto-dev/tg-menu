@@ -3,7 +3,7 @@ import { InlineKeyboardButton } from 'typegram';
 
 import { PaginationTelegramService } from '../services/pagination.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
-import { PaginationSetup } from '../interfaces/pagination-setup.interface';
+import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
 import { MenuPathParser } from './menu-path-parser.helper';
 import { backHomeButtonHelper } from './back-home-button.helper';
 
@@ -84,7 +84,7 @@ export class MenuHelper {
     this.addRow(backHomeButtonHelper(this.menuPath.path));
   }
 
-  async setupPagination(params: PaginationSetup) {
+  async setupPagination(params: TGMenuPagination) {
     this.addRow(
       await this.paginationService.generatePagination(
         this.menuPath.removeQueryParameters(this.menuPath.path),

@@ -1,4 +1,4 @@
-export interface PaginationSetup {
+export interface TGMenuPagination {
   currentPage: number;
   itemsByPage: number;
   totalAvailableItems: number;

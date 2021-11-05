@@ -2,13 +2,13 @@ import * as paginationLogic from 'pagination-logic';
 import { Injectable } from '@nestjs/common';
 import { InlineKeyboardButton } from 'typegram';
 
-import { PaginationSetup } from '../interfaces/pagination-setup.interface';
+import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
 
 @Injectable()
 export class PaginationTelegramService {
   async generatePagination(
     endpoint: string,
-    paginationSetup: PaginationSetup,
+    paginationSetup: TGMenuPagination,
     callbackQueryId?: string,
   ): Promise<InlineKeyboardButton[]> {
     const { currentPage, itemsByPage, totalAvailableItems } = paginationSetup;

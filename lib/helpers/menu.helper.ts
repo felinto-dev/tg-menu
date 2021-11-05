@@ -1,15 +1,15 @@
 import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
-import { PaginationTelegramService } from 'lib/services/pagination.service';
-import { TelegrafContext } from '../interfaces/telegraf-context.interface';
-import { PaginationSetup } from '../interfaces/pagination-setup.interface';
+import { PaginationTelegramService } from '../services/pagination.service';
+import { TGMenuContext } from '../interfaces/telegraf-context.interface';
+import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
 import { MenuPathParser } from './menu-path-parser.helper';
 import { backHomeButtonHelper } from './back-home-button.helper';
 
 export class MenuHelper {
   constructor(
-    private readonly ctx: TelegrafContext,
+    private readonly ctx: TGMenuContext,
     private readonly paginationService: PaginationTelegramService,
   ) {}
 
@@ -28,10 +28,10 @@ export class MenuHelper {
   }
 
   private resolveI18n(text: string) {
-    if (text.startsWith('%') && text.endsWith('%')) {
-      // TODO: Add support to i18n
-      return text;
-      // return this.ctx.i18n.t(text.slice(1, text.length - 1));
+    if (this.ctx.i18n) {
+      if (text.startsWith('%') && text.endsWith('%')) {
+        return this.ctx.i18n.t(text.slice(1, text.length - 1));
+      }
     }
 
     return text;
@@ -84,7 +84,7 @@ export class MenuHelper {
     this.addRow(backHomeButtonHelper(this.menuPath.path));
   }
 
-  async setupPagination(params: PaginationSetup) {
+  async setupPagination(params: TGMenuPagination) {
     this.addRow(
       await this.paginationService.generatePagination(
         this.menuPath.removeQueryParameters(this.menuPath.path),

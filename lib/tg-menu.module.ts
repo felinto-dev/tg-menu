@@ -5,6 +5,6 @@ import { PaginationTelegramService } from './services/pagination.service';
 
 @Module({
   providers: [PaginationTelegramService, SetupMenuPathInterceptor],
-  exports: [SetupMenuPathInterceptor],
+  exports: [PaginationTelegramService, SetupMenuPathInterceptor],
 })
 export class TgMenuModule {}

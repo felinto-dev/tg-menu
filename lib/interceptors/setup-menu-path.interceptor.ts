@@ -10,7 +10,7 @@ import { deunionize } from 'telegraf';
 import { tap } from 'rxjs/operators';
 
 import { MenuPathParser } from '../helpers/menu-path-parser.helper';
-import { TelegrafContext } from '../interfaces/telegraf-context.interface';
+import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { MenuHelper } from '../helpers/menu.helper';
 
@@ -27,7 +27,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       context.getHandler(),
     );
 
-    const ctx: TelegrafContext =
+    const ctx: TGMenuContext =
       TelegrafExecutionContext.create(context).getContext();
 
     if (ctx.callbackQuery) {

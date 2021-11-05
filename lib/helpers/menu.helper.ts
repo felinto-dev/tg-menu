@@ -28,10 +28,10 @@ export class MenuHelper {
   }
 
   private resolveI18n(text: string) {
-    if (text.startsWith('%') && text.endsWith('%')) {
-      // TODO: Add support to i18n
-      return text;
-      // return this.ctx.i18n.t(text.slice(1, text.length - 1));
+    if (this.ctx.i18n) {
+      if (text.startsWith('%') && text.endsWith('%')) {
+        return this.ctx.i18n.t(text.slice(1, text.length - 1));
+      }
     }
 
     return text;

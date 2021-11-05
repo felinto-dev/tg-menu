@@ -2,14 +2,14 @@ import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
 import { PaginationTelegramService } from 'lib/services/pagination.service';
-import { TelegrafContext } from '../interfaces/telegraf-context.interface';
+import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { PaginationSetup } from '../interfaces/pagination-setup.interface';
 import { MenuPathParser } from './menu-path-parser.helper';
 import { backHomeButtonHelper } from './back-home-button.helper';
 
 export class MenuHelper {
   constructor(
-    private readonly ctx: TelegrafContext,
+    private readonly ctx: TGMenuContext,
     private readonly paginationService: PaginationTelegramService,
   ) {}
 

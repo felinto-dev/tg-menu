@@ -1,6 +1,7 @@
 import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
+import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
@@ -11,6 +12,7 @@ export class MenuHelper {
   constructor(
     private readonly ctx: TGMenuContext,
     private readonly paginationService: PaginationTelegramService,
+    private readonly temporaryCallbackService: TemporaryCallbackService,
   ) {}
 
   private header = '👇 Selecione uma das opções do menu abaixo:';
@@ -50,7 +52,7 @@ export class MenuHelper {
     this.items.push(...rows);
   }
 
-  submenu(text: string, submenuPath = 'null') {
+  async submenu(text: string, submenuPath = 'null') {
     if (this.menuPath.path === '/') {
       return this.buildButton({ text, callback_data: `/${submenuPath}` });
     }
@@ -58,6 +60,17 @@ export class MenuHelper {
     submenuPath = `${this.menuPath.removeQueryParameters(
       this.menuPath.path,
     )}/${submenuPath}`;
+
+    if (submenuPath.length > 64) {
+      return this.buildButton({
+        text,
+        callback_data: await this.temporaryCallbackService.setCallback(
+          submenuPath,
+          15,
+        ),
+      });
+    }
+
     return this.buildButton({ text, callback_data: submenuPath });
   }
 

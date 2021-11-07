@@ -16,7 +16,6 @@ export class TemporaryCallbackService {
 
   async getCallback(key: string) {
     const callbackData = await this.cacheManager.get(key);
-    await this.cacheManager.set(key, callbackData, { ttl: this.EXPIRES_IN });
     return callbackData;
   }
 }

@@ -9,6 +9,7 @@ import { TelegrafExecutionContext } from 'nestjs-telegraf';
 import { deunionize } from 'telegraf';
 import { tap } from 'rxjs/operators';
 
+import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { MenuPathParser } from '../helpers/menu-path-parser.helper';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { PaginationTelegramService } from '../services/pagination.service';
@@ -19,6 +20,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
   constructor(
     private readonly reflector: Reflector,
     private readonly telegramPaginationService: PaginationTelegramService,
+    private readonly temporaryCallbackService: TemporaryCallbackService,
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler) {
@@ -39,7 +41,11 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       menuPath.path = menuPath.template;
     }
 
-    ctx.menu = new MenuHelper(ctx, this.telegramPaginationService);
+    ctx.menu = new MenuHelper(
+      ctx,
+      this.telegramPaginationService,
+      this.temporaryCallbackService,
+    );
     ctx.menu.setPath(menuPath);
     return next.handle().pipe(tap(() => ctx.menu.showMenu()));
   }

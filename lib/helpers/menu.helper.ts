@@ -66,7 +66,6 @@ export class MenuHelper {
         text,
         callback_data: await this.temporaryCallbackService.setCallback(
           submenuPath,
-          15,
         ),
       });
     }

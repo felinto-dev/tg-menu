@@ -7,6 +7,7 @@ import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
 import { MenuPathParser } from './menu-path-parser.helper';
 import { backHomeButtonHelper } from './back-home-button.helper';
+import { MAX_ALLOWED_CALLBACK_DATA } from '../consts';
 
 export class MenuHelper {
   constructor(
@@ -61,7 +62,7 @@ export class MenuHelper {
       this.menuPath.path,
     )}/${submenuPath}`;
 
-    if (submenuPath.length > 64) {
+    if (submenuPath.length > MAX_ALLOWED_CALLBACK_DATA) {
       return this.buildButton({
         text,
         callback_data: await this.temporaryCallbackService.setCallback(

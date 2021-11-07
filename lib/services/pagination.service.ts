@@ -1,30 +1,44 @@
-import * as paginationLogic from 'pagination-logic';
 import { Injectable } from '@nestjs/common';
 import { InlineKeyboardButton } from 'typegram';
+import * as paginationLogic from 'pagination-logic';
 
+import { MAX_ALLOWED_CALLBACK_DATA } from '../consts';
 import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
+import { TemporaryCallbackService } from './temporary-callback.service';
 
 @Injectable()
 export class PaginationTelegramService {
+  constructor(
+    private readonly temporaryCallbackQueryService: TemporaryCallbackService,
+  ) {}
+
   async generatePagination(
     endpoint: string,
     paginationSetup: TGMenuPagination,
-    callbackQueryId?: string,
   ): Promise<InlineKeyboardButton[]> {
     const { currentPage, itemsByPage, totalAvailableItems } = paginationSetup;
     const paginationMenu: InlineKeyboardButton[] = [];
 
+    let pageSize: number;
+    if (totalAvailableItems > 30) {
+      pageSize = 5;
+    } else {
+      pageSize = 3;
+    }
+
     const pagination = paginationLogic({
       total: totalAvailableItems,
       single: itemsByPage,
-      pageSize: 3,
+      pageSize,
       currentPage,
       pageLinkRule: (pageNumber: number) => {
-        const callback_data = `${endpoint}?page=${pageNumber}`;
-        if (callbackQueryId) {
-          return `${callback_data}${callbackQueryId}/`;
+        const callbackData = `${endpoint}?page=${pageNumber}`;
+
+        if (callbackData.length > MAX_ALLOWED_CALLBACK_DATA) {
+          return this.temporaryCallbackQueryService.setCallback(callbackData);
         }
-        return callback_data;
+
+        return callbackData;
       },
     });
 
@@ -40,16 +54,13 @@ export class PaginationTelegramService {
     }
 
     const paginationKeyboard = pagination.pages.map(
-      (pageItem: { number: number; link: string }) => {
-        if (pageItem.number === pagination.currentPage) {
-          return {
-            text: `- ${pageItem.number} -`,
-            callback_data: `!already-in-current-page->${pageItem.number}`,
-          };
-        }
-
-        return { text: pageItem.number, callback_data: pageItem.link };
-      },
+      (pageItem: { number: number; link: string }) => ({
+        text:
+          pageItem.number === pagination.currentPage
+            ? `- ${pageItem.number} -`
+            : pageItem.number,
+        callback_data: pageItem.link,
+      }),
     );
     paginationMenu.push(...paginationKeyboard);
 

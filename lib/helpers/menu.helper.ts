@@ -74,6 +74,10 @@ export class MenuHelper {
     return this.buildButton({ text, callback_data: submenuPath });
   }
 
+  nav(text: string, menuPath: string) {
+    return this.buildButton({ text, callback_data: menuPath });
+  }
+
   url(text: string, url: string) {
     return this.buildButton({ text, url });
   }

@@ -10,12 +10,13 @@ describe(MenuPathParser.name, () => {
     const template = '/producer/products/:productId';
     const regex = new MenuPathParser(template).templateToRegex();
     expect(regex.test('/producer/products/teste1')).toBeTruthy();
+    expect(regex.test('/producer/products/teste1/')).toBeTruthy();
     expect(regex.test('/producer/products/teste1?a=1')).toBeTruthy();
     expect(regex.test('/producer/products/teste1?a=1&b=2')).toBeTruthy();
+    expect(regex.test('/producer/products/11111?a=111/')).toBeTruthy();
     expect(regex.test('/producer/products/teste1?')).not.toBeTruthy();
     expect(regex.test('/producer/products/111111/group')).not.toBeTruthy();
     expect(regex.test('/producer/products/111111?a=1/group')).not.toBeTruthy();
-    expect(regex.test('/producer/products/11111?a=111/')).not.toBeTruthy();
   });
 
   it('should return path parameters', () => {

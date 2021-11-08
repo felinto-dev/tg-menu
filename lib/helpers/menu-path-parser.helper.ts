@@ -37,7 +37,7 @@ export class MenuPathParser {
     const menuPath = this.resolvePathParametersRegex();
     const queryParametersRegex = this.regexLibrary.queryParameters.source;
     return new RegExp(
-      `^${menuPath}(?<queryParams>${queryParametersRegex})*$`,
+      `^${menuPath}(?<queryParams>${queryParametersRegex})*/?$`,
       'i',
     );
   }

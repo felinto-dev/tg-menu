@@ -25,7 +25,11 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler) {
     const menuPath = this.reflector.get<MenuPathParser>(
-      'menu_path',
+      'menuPath',
+      context.getHandler(),
+    );
+    const hiddenMenu = this.reflector.get<MenuPathParser>(
+      'hiddenMenu',
       context.getHandler(),
     );
 
@@ -47,6 +51,12 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       this.temporaryCallbackService,
     );
     ctx.menu.setPath(menuPath);
-    return next.handle().pipe(tap(() => ctx.menu.showMenu()));
+    return next.handle().pipe(
+      tap(() => {
+        if (!hiddenMenu) {
+          ctx.menu.showMenu();
+        }
+      }),
+    );
   }
 }

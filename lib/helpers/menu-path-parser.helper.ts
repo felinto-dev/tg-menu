@@ -1,16 +1,10 @@
-import { InternalServerErrorException, RequestMethod } from '@nestjs/common';
+import { RequestMethod } from '@nestjs/common';
 
 export class MenuPathParser {
   constructor(
     private readonly requestMethod: RequestMethod,
     public readonly template: string,
-  ) {
-    if (!this.template.startsWith('/')) {
-      throw new InternalServerErrorException(
-        `The template "${template}" is invalid!`,
-      );
-    }
-  }
+  ) {}
 
   public path: string;
 

@@ -1,7 +1,10 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { InternalServerErrorException, RequestMethod } from '@nestjs/common';
 
 export class MenuPathParser {
-  constructor(public readonly template: string) {
+  constructor(
+    private readonly requestMethod: RequestMethod,
+    public readonly template: string,
+  ) {
     if (!this.template.startsWith('/')) {
       throw new InternalServerErrorException(
         `The template "${template}" is invalid!`,
@@ -37,7 +40,9 @@ export class MenuPathParser {
     const menuPath = this.resolvePathParametersRegex();
     const queryParametersRegex = this.regexLibrary.queryParameters.source;
     return new RegExp(
-      `^${menuPath}(?<queryParams>${queryParametersRegex})*/?$`,
+      `^${
+        RequestMethod[this.requestMethod]
+      } ${menuPath}(?<queryParams>${queryParametersRegex})*/?$`,
       'i',
     );
   }

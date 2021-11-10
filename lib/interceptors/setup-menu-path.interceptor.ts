@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
+  RequestMethod,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { TelegrafExecutionContext } from 'nestjs-telegraf';
@@ -28,8 +29,8 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       'menuPath',
       context.getHandler(),
     );
-    const hiddenMenu = this.reflector.get<MenuPathParser>(
-      'hiddenMenu',
+    const requestMethod = this.reflector.get<RequestMethod>(
+      'requestMethod',
       context.getHandler(),
     );
 
@@ -53,7 +54,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
     ctx.menu.setPath(menuPath);
     return next.handle().pipe(
       tap(() => {
-        if (!hiddenMenu) {
+        if (requestMethod === RequestMethod.GET) {
           ctx.menu.showMenu();
         }
       }),

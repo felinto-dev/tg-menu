@@ -51,7 +51,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       this.telegramPaginationService,
       this.temporaryCallbackService,
     );
-    ctx.menu.setPath(menuPath);
+    ctx.menu.setupParser(menuPath);
     return next.handle().pipe(
       tap(() => {
         if (requestMethod === RequestMethod.GET) {

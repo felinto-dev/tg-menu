@@ -18,12 +18,12 @@ export class MenuHelper {
 
   private header = '👇 Selecione uma das opções do menu abaixo:';
 
-  private menuPath: MenuPathParser;
+  private parser: MenuPathParser;
 
   private items: InlineKeyboardButton[][] = [];
 
-  setPath(path: MenuPathParser) {
-    this.menuPath = path;
+  setupParser(path: MenuPathParser) {
+    this.parser = path;
   }
 
   setHeader(text: string) {
@@ -54,12 +54,12 @@ export class MenuHelper {
   }
 
   async submenu(text: string, submenuPath = 'null') {
-    if (this.menuPath.path === '/') {
+    if (this.parser.path === '/') {
       return this.buildButton({ text, callback_data: `/${submenuPath}` });
     }
 
-    submenuPath = `${this.menuPath.removeQueryParameters(
-      this.menuPath.path,
+    submenuPath = `${this.parser.removeQueryParameters(
+      this.parser.path,
     )}/${submenuPath}`;
 
     if (submenuPath.length > MAX_ALLOWED_CALLBACK_DATA) {
@@ -98,13 +98,13 @@ export class MenuHelper {
   }
 
   private async setupBackHomeButton() {
-    this.addRow(backHomeButtonHelper(this.menuPath.path));
+    this.addRow(backHomeButtonHelper(this.parser.path));
   }
 
   async setupPagination(params: TGMenuPagination) {
     this.addRow(
       await this.paginationService.generatePagination(
-        this.menuPath.removeQueryParameters(this.menuPath.path),
+        this.parser.removeQueryParameters(this.parser.path),
         params,
       ),
     );

@@ -3,15 +3,33 @@ import { RequestMethod } from '@nestjs/common';
 export class MenuPathParser {
   constructor(
     private readonly requestMethod: RequestMethod,
-    public readonly template: string,
-  ) {}
+    public template: string,
+  ) {
+    this.sanitizeTemplate();
+    this.validateTemplate();
+  }
 
   public path: string;
 
-  private regexLibrary = {
+  public regexLibrary = {
     queryParameters: /(\?|&)([^=]+)=([^&/]+)/,
     pathParameters: /:(?<regexKey>[a-z]+)(<(?<regexTemplate>[a-z]+)>)?/i,
   };
+
+  private sanitizeTemplate() {
+    if (!this.template.startsWith('/')) {
+      this.template = `/${this.template}`;
+    }
+    if (!this.template.endsWith('/')) {
+      this.template += '/';
+    }
+  }
+
+  private validateTemplate() {
+    if (this.template.match(/\/\//)) {
+      throw new Error();
+    }
+  }
 
   private resolvePathParametersRegex() {
     const paths = this.template.split('/');
@@ -34,9 +52,7 @@ export class MenuPathParser {
     const menuPath = this.resolvePathParametersRegex();
     const queryParametersRegex = this.regexLibrary.queryParameters.source;
     return new RegExp(
-      `^${
-        RequestMethod[this.requestMethod]
-      } ${menuPath}(?<queryParams>${queryParametersRegex})*/?$`,
+      `^${menuPath}(?<queryParams>${queryParametersRegex})*/?$`,
       'i',
     );
   }

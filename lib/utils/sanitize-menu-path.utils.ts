@@ -8,7 +8,7 @@ export const sanitizeMenuPath = (path: string) => {
   }
 
   if (path.match(/\/\//)) {
-    throw new Error("Path can't to have double slash");
+    throw new Error("Paths can't to have double slash");
   }
 
   return path;

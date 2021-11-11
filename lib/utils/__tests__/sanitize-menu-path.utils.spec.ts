@@ -1,10 +1,10 @@
 import { sanitizeMenuPath } from '../sanitize-menu-path.utils';
 
 describe(sanitizeMenuPath.name, () => {
-  it('should remove slash in beginner and end of path', () => {
-    const expectedOutput = 'producer/accounts';
-    expect(sanitizeMenuPath('/producer/accounts')).toEqual(expectedOutput);
-    expect(sanitizeMenuPath('/producer/accounts/')).toEqual(expectedOutput);
+  it('should throws an error when have does not have slashes in beginner or end', () => {
+    expect(() => sanitizeMenuPath('producer/accounts')).toThrow();
+    expect(() => sanitizeMenuPath('/producer/accounts')).toThrow();
+    expect(() => sanitizeMenuPath('producer/accounts/')).toThrow();
   });
 
   it('should throw an error when path is invalid', () => {

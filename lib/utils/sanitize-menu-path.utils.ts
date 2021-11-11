@@ -1,10 +1,6 @@
 export const sanitizeMenuPath = (path: string) => {
-  if (path.startsWith('/')) {
-    path = path.slice(1);
-  }
-
-  if (path.endsWith('/')) {
-    path = path.slice(0, path.length - 1);
+  if (!path.startsWith('/') || !path.endsWith('/')) {
+    throw new Error("Paths should to start and ends with '/' (slash)");
   }
 
   if (path.match(/\/\//)) {

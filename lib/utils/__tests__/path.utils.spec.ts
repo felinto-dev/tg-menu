@@ -1,4 +1,4 @@
-import { sanitizeMenuPath } from '../sanitize-menu-path.utils';
+import { sanitizeMenuPath } from '../path.utils';
 
 describe(sanitizeMenuPath.name, () => {
   it('should throws an error when have does not have slashes in beginner or end', () => {

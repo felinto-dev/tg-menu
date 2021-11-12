@@ -1,11 +1,11 @@
 import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
+import { generatePathSubmenu } from '../utils/path.utils';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
-import { MenuPathParser } from './menu-path-parser.helper';
 import { backHomeButtonHelper } from './back-home-button.helper';
 import { MAX_ALLOWED_CALLBACK_DATA } from '../consts';
 
@@ -14,17 +14,12 @@ export class MenuHelper {
     private readonly ctx: TGMenuContext,
     private readonly paginationService: PaginationTelegramService,
     private readonly temporaryCallbackService: TemporaryCallbackService,
+    private readonly path: string,
   ) {}
 
   private header = '👇 Selecione uma das opções do menu abaixo:';
 
-  private menuPath: MenuPathParser;
-
   private items: InlineKeyboardButton[][] = [];
-
-  setPath(path: MenuPathParser) {
-    this.menuPath = path;
-  }
 
   setHeader(text: string) {
     this.header = this.resolveI18n(text);
@@ -54,13 +49,7 @@ export class MenuHelper {
   }
 
   async submenu(text: string, submenuPath = 'null') {
-    if (this.menuPath.path === '/') {
-      return this.buildButton({ text, callback_data: `/${submenuPath}` });
-    }
-
-    submenuPath = `${this.menuPath.removeQueryParameters(
-      this.menuPath.path,
-    )}/${submenuPath}`;
+    submenuPath = generatePathSubmenu(this.path, submenuPath);
 
     if (submenuPath.length > MAX_ALLOWED_CALLBACK_DATA) {
       return this.buildButton({
@@ -72,6 +61,10 @@ export class MenuHelper {
     }
 
     return this.buildButton({ text, callback_data: submenuPath });
+  }
+
+  nav(text: string, menuPath: string) {
+    return this.buildButton({ text, callback_data: menuPath });
   }
 
   url(text: string, url: string) {
@@ -94,15 +87,12 @@ export class MenuHelper {
   }
 
   private async setupBackHomeButton() {
-    this.addRow(backHomeButtonHelper(this.menuPath.path));
+    this.addRow(backHomeButtonHelper(this.path));
   }
 
   async setupPagination(params: TGMenuPagination) {
     this.addRow(
-      await this.paginationService.generatePagination(
-        this.menuPath.removeQueryParameters(this.menuPath.path),
-        params,
-      ),
+      await this.paginationService.generatePagination(this.path, params),
     );
   }
 

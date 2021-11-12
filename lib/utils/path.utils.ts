@@ -1,7 +1,7 @@
 import { RequestMethod } from '@nestjs/common';
 import { pathToRegexp, match } from 'path-to-regexp';
 
-const queryParametersRegex = /(\?|&)([^=]+)=([^&/]+)/;
+const queryParametersRegex = /(\?|&)([^=]+)=([^&/]+)/g;
 
 export const sanitizeMenuPath = (path: string) => {
   if (!path.startsWith('/') || !path.endsWith('/')) {
@@ -20,22 +20,16 @@ export const pathToRegex = (requestMethod: RequestMethod, path: string) => {
   const pathRegex = pathToRegexp(path, [], {
     start: false,
     end: false,
-    strict: true,
   });
   return new RegExp(
     `^${RequestMethod[requestMethod]} ${pathRegex.source}(<queryParameters>${queryParametersRegex.source})?`,
   );
 };
 
-export const parsePath = (path: string, regex: string) => {
-  const pathMatch = match(regex);
-  const queries = new RegExp(
-    `(?<queryParams>${queryParametersRegex.source}*)`,
-  ).exec(path)?.groups.queryParams;
-
-  return {
-    // eslint-disable-next-line dot-notation
-    params: { ...pathMatch(path)['params'] },
-    query: Object.fromEntries(new URLSearchParams(queries)),
-  };
-};
+export const parsePath = (path: string, callback: string) => ({
+  // eslint-disable-next-line dot-notation
+  params: { ...match(path, { end: false })(callback)['params'] },
+  query: Object.fromEntries(
+    new URLSearchParams(callback.match(queryParametersRegex)?.join('')),
+  ),
+});

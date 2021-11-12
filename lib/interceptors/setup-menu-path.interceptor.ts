@@ -50,6 +50,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       ctx,
       this.telegramPaginationService,
       this.temporaryCallbackService,
+      ctx.callbackQuery ? deunionize(ctx.callbackQuery).data : menuPath,
     );
     return next.handle().pipe(
       tap(() => {

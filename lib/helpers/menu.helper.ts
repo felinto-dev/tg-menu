@@ -1,13 +1,13 @@
 import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
-import { generateSubmenuPath } from '../utils/path.utils';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
 import { backHomeButtonHelper } from './back-home-button.helper';
 import { MAX_ALLOWED_CALLBACK_DATA } from '../consts';
+import { generateSubmenuPath } from '../utils/generate-submenu-path';
 
 export class MenuHelper {
   constructor(
@@ -49,7 +49,10 @@ export class MenuHelper {
   }
 
   async submenu(text: string, submenuPath = 'null') {
+    console.log('path', this.path);
+    console.log('submenu path', submenuPath);
     submenuPath = generateSubmenuPath(this.path, submenuPath);
+    console.log('result', submenuPath);
 
     if (submenuPath.length > MAX_ALLOWED_CALLBACK_DATA) {
       return this.buildButton({

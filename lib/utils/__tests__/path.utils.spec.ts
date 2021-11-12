@@ -27,12 +27,15 @@ describe(pathToRegex.name, () => {
     expect('POST /producer/products/').toMatch(
       pathToRegex(RequestMethod.POST, '/producer/products/'),
     );
+    expect('GET /').toMatch(pathToRegex(RequestMethod.GET, '/'));
+
     expect('POST /producer/products/').not.toMatch(
       pathToRegex(RequestMethod.GET, '/producer/products/'),
     );
-    expect('GET /').toMatch(pathToRegex(RequestMethod.GET, '/'));
+    expect('GET /producer/products/').not.toMatch(
+      pathToRegex(RequestMethod.GET, '/producer/'),
+    );
   });
-
   it('should match callback with path parameters', () => {
     expect('GET /producer/products/1/').toMatch(
       pathToRegex(RequestMethod.GET, '/producer/products/:productId/'),

@@ -35,7 +35,7 @@ export const pathToRegex = (
     end: false,
   });
   return new RegExp(
-    `^${RequestMethod[requestMethod]} ${pathRegex.source}(<queryParameters>${queryParametersRegex.source})?`,
+    `^${RequestMethod[requestMethod]} ${pathRegex.source}(?<queryParameters>${queryParametersRegex.source})*$`,
   );
 };
 

@@ -4,8 +4,12 @@ import { pathToRegexp, match } from 'path-to-regexp';
 const queryParametersRegex = /(\?|&)([^=]+)=([^&/]+)/g;
 
 export const sanitizeMenuPath = (path: string) => {
-  if (!path.startsWith('/') || !path.endsWith('/')) {
-    throw new Error("Pats should start and ends with '/' (slash)");
+  if (!path.startsWith('/')) {
+    path = `/${path}`;
+  }
+
+  if (!path.endsWith('/')) {
+    path = `${path}/`;
   }
 
   if (path.match(/\/\//)) {
@@ -15,7 +19,10 @@ export const sanitizeMenuPath = (path: string) => {
   return path;
 };
 
-export const pathToRegex = (requestMethod: RequestMethod, path: string) => {
+export const pathToRegex = (
+  requestMethod: RequestMethod,
+  path: string,
+): RegExp => {
   path = sanitizeMenuPath(path);
   const pathRegex = pathToRegexp(path, [], {
     start: false,

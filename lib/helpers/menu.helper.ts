@@ -1,7 +1,7 @@
 import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
-import { generatePathSubmenu } from 'lib/utils/path.utils';
+import { generatePathSubmenu } from '../utils/path.utils';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';

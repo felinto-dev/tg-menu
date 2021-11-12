@@ -15,10 +15,7 @@ export const sanitizeMenuPath = (path: string) => {
   return path;
 };
 
-export const generatePathRegex = (
-  requestMethod: RequestMethod,
-  path: string,
-) => {
+export const pathToRegex = (requestMethod: RequestMethod, path: string) => {
   path = sanitizeMenuPath(path);
   const pathRegex = pathToRegexp(path, [], {
     start: false,
@@ -30,12 +27,12 @@ export const generatePathRegex = (
   );
 };
 
-export const parsePath = (rawPath: string, path: string) => {
-  const pathMatch = match(path);
+export const parsePath = (path: string, regex: string) => {
+  const pathMatch = match(regex);
 
   return {
     // eslint-disable-next-line dot-notation
-    params: { ...pathMatch(rawPath)['params'] },
+    params: { ...pathMatch(path)['params'] },
     query: {},
   };
 };

@@ -3,22 +3,19 @@ import { RequestMethod } from '@nestjs/common';
 import { generateSubmenuPath } from '../generate-submenu-path';
 
 describe(generateSubmenuPath.name, () => {
-  it('generate submenu path', () => {
+  it('should generate submenu path for start menu "/"', () => {
     expect(generateSubmenuPath('GET /', 'test')).toEqual('GET /test/');
+  });
+
+  it('should generate submenu path from another submenu', () => {
     expect(generateSubmenuPath('GET /producer/', 'products')).toEqual(
-      'GET /producer/products/',
-    );
-    expect(generateSubmenuPath('GET /producer?page=1', 'products')).toEqual(
-      'GET /producer/products/',
-    );
-    expect(generateSubmenuPath('GET /producer?page=1/', 'products')).toEqual(
       'GET /producer/products/',
     );
   });
 
-  it('should generate submenu path when current path has query parameters', () => {
-    expect(generateSubmenuPath('GET /products/?page=2', 'productId')).toEqual(
-      'GET /products/productId/',
+  it('should generate submenu path from another submenu with query parameters', () => {
+    expect(generateSubmenuPath('GET /producer?page=1/', 'products')).toEqual(
+      'GET /producer/products/',
     );
   });
 

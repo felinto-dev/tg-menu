@@ -13,7 +13,7 @@ export const generateSubmenuPath = (
   path = path.replace(new RegExp(`${QUERY_PARAMETERS_REGEX.source}/$`), '/');
 
   if (queryParams && Object.keys(queryParams).length > 0) {
-    const queries = `?${new URLSearchParams(queryParams).toString()}`;
+    const queries = `/?${new URLSearchParams(queryParams).toString()}`;
     return `${RequestMethod[action]} ${path}${submenu}${queries}/`;
   }
   return `${RequestMethod[action]} ${path}${submenu}/`;

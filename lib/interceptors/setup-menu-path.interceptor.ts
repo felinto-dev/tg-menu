@@ -10,11 +10,11 @@ import { TelegrafExecutionContext } from 'nestjs-telegraf';
 import { deunionize } from 'telegraf';
 import { tap } from 'rxjs/operators';
 
-import { parsePath } from '../utils/path.utils';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { MenuHelper } from '../helpers/menu.helper';
+import { parsePath } from '../utils/parse-path';
 
 @Injectable()
 export class SetupMenuPathInterceptor implements NestInterceptor {

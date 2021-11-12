@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 
 import { SetupMenuPathInterceptor } from '../interceptors/setup-menu-path.interceptor';
-import { pathToRegex } from '../utils/path.utils';
+import { pathToRegex } from '../utils/path-to-regex';
 
 export const TGMenu = (requestMethod: RequestMethod, path = '/') => {
   return applyDecorators(

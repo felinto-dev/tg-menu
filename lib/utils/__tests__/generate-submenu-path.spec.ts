@@ -31,7 +31,7 @@ describe(generateSubmenuPath.name, () => {
         page: '2',
         sortBy: 'downloads',
       }),
-    ).toEqual('GET /producer/products?page=2&sortBy=downloads/');
+    ).toEqual('GET /producer/products/?page=2&sortBy=downloads/');
   });
 
   it('generate submenu path with custom request method', () => {

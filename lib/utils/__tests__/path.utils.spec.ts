@@ -126,6 +126,12 @@ describe(generateSubmenuPath.name, () => {
     );
   });
 
+  it('should generate submenu path when current path has query parameters', () => {
+    expect(generateSubmenuPath('GET /products/?page=2', 'productId')).toEqual(
+      'GET /products/productId/',
+    );
+  });
+
   it('should does not populate query parameters when extra params is an empty object', () => {
     expect(
       generateSubmenuPath('GET /producer/', 'products', RequestMethod.GET, {}),

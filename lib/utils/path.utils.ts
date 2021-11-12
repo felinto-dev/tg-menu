@@ -54,7 +54,10 @@ export const generateSubmenuPath = (
   queryParams?: Record<string, string>,
 ) => {
   path = sanitizeMenuPath(path);
-  path = path.replace(queryParametersRegex, path.endsWith('/') ? '' : '/');
+  path = path.replace(
+    new RegExp(`${queryParametersRegex.source}/$`),
+    path.endsWith('/') ? '' : '/',
+  );
 
   if (queryParams && Object.keys(queryParams).length > 0) {
     const queries = `?${new URLSearchParams(queryParams).toString()}`;

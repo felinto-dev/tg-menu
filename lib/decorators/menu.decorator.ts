@@ -1,21 +1,19 @@
 import { Action } from 'nestjs-telegraf';
-import { applyDecorators, SetMetadata, UseInterceptors } from '@nestjs/common';
+import {
+  applyDecorators,
+  RequestMethod,
+  SetMetadata,
+  UseInterceptors,
+} from '@nestjs/common';
 
 import { SetupMenuPathInterceptor } from '../interceptors/setup-menu-path.interceptor';
-import { MenuPathParser } from '../helpers/menu-path-parser.helper';
+import { pathToRegex } from '../utils/path.utils';
 
-export const TGMenu = (
-  path = '',
-  params?: {
-    hiddenMenu: boolean;
-  },
-) => {
-  const menuPath = new MenuPathParser(path);
-
+export const TGMenu = (requestMethod: RequestMethod, path = '/') => {
   return applyDecorators(
-    Action(menuPath.templateToRegex()),
-    SetMetadata('menuPath', menuPath),
-    SetMetadata('hiddenMenu', params?.hiddenMenu),
+    SetMetadata('requestMethod', requestMethod),
+    SetMetadata('menuPath', `${RequestMethod[requestMethod]} ${path}`),
+    Action(pathToRegex(requestMethod, path)),
     UseInterceptors(SetupMenuPathInterceptor),
   );
 };

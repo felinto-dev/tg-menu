@@ -1,20 +1,35 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { RequestMethod } from '@nestjs/common';
 
 export class MenuPathParser {
-  constructor(public readonly template: string) {
-    if (!this.template.startsWith('/')) {
-      throw new InternalServerErrorException(
-        `The template "${template}" is invalid!`,
-      );
-    }
+  constructor(
+    private readonly requestMethod: RequestMethod,
+    public template: string,
+  ) {
+    this.sanitizeTemplate();
+    this.validateTemplate();
   }
 
   public path: string;
 
-  private regexLibrary = {
+  public regexLibrary = {
     queryParameters: /(\?|&)([^=]+)=([^&/]+)/,
     pathParameters: /:(?<regexKey>[a-z]+)(<(?<regexTemplate>[a-z]+)>)?/i,
   };
+
+  private sanitizeTemplate() {
+    if (!this.template.startsWith('/')) {
+      this.template = `/${this.template}`;
+    }
+    if (!this.template.endsWith('/')) {
+      this.template += '/';
+    }
+  }
+
+  private validateTemplate() {
+    if (this.template.match(/\/\//)) {
+      throw new Error();
+    }
+  }
 
   private resolvePathParametersRegex() {
     const paths = this.template.split('/');

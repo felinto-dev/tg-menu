@@ -35,10 +35,10 @@ describe(pathToRegex.name, () => {
   });
 
   it('should match callback with query parameters', () => {
-    expect('GET /producer/products/?page=1').toMatch(
+    expect('GET /producer/products/?page=1/').toMatch(
       pathToRegex(RequestMethod.GET, '/producer/products/'),
     );
-    expect('GET /producer/products/?page=1&sortBy=downloads').toMatch(
+    expect('GET /producer/products/?page=1&sortBy=downloads/').toMatch(
       pathToRegex(RequestMethod.GET, '/producer/products/'),
     );
   });

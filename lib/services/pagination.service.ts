@@ -33,7 +33,7 @@ export class PaginationTelegramService {
       pageSize,
       currentPage,
       pageLinkRule: async (pageNumber: number) => {
-        const callbackData = `${endpoint}?page=${pageNumber}`;
+        const callbackData = `${endpoint}/?page=${pageNumber}/`;
 
         if (callbackData.length > MAX_ALLOWED_CALLBACK_DATA) {
           return this.temporaryCallbackQueryService.setCallback(callbackData);

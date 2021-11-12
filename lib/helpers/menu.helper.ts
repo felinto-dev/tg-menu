@@ -49,10 +49,7 @@ export class MenuHelper {
   }
 
   async submenu(text: string, submenuPath = 'null') {
-    console.log('path', this.path);
-    console.log('submenu path', submenuPath);
     submenuPath = generateSubmenuPath(this.path, submenuPath);
-    console.log('result', submenuPath);
 
     if (submenuPath.length > MAX_ALLOWED_CALLBACK_DATA) {
       return this.buildButton({

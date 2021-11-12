@@ -39,7 +39,7 @@ describe(parsePath.name, () => {
     expect(
       parsePath(
         'GET /producer/products/:productId/:groupId/',
-        'GET /producer/products/123/456/?page=1&sortBy=downloads',
+        'GET /producer/products/123/456/?page=1&sortBy=downloads/',
       ),
     ).toStrictEqual({
       query: { page: '1', sortBy: 'downloads' },

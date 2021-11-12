@@ -29,10 +29,13 @@ export const pathToRegex = (requestMethod: RequestMethod, path: string) => {
 
 export const parsePath = (path: string, regex: string) => {
   const pathMatch = match(regex);
+  const queries = new RegExp(
+    `(?<queryParams>${queryParametersRegex.source}*)`,
+  ).exec(path)?.groups.queryParams;
 
   return {
     // eslint-disable-next-line dot-notation
     params: { ...pathMatch(path)['params'] },
-    query: {},
+    query: Object.fromEntries(new URLSearchParams(queries)),
   };
 };

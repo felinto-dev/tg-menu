@@ -61,7 +61,9 @@ describe(parsePath.name, () => {
     ).toStrictEqual({
       productId: '1',
     });
+  });
 
+  it('should parse two path parameters', () => {
     expect(
       parsePath(
         'GET /producer/products/123/456/',
@@ -70,6 +72,17 @@ describe(parsePath.name, () => {
     ).toStrictEqual({
       productId: '123',
       groupId: '456',
+    });
+  });
+
+  it('should parse query parameters', () => {
+    expect(
+      parsePath(
+        'GET /producer/products/123/456/?page=1&sortBy=downloads',
+        'GET /producer/products/:productId/:groupId/',
+      ).query,
+    ).toStrictEqual({
+      page: '1',
     });
   });
 });

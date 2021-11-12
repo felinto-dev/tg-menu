@@ -111,7 +111,7 @@ describe(parsePath.name, () => {
 
 describe(generateSubmenuPath.name, () => {
   it('generate submenu path', () => {
-    expect(generateSubmenuPath('GET /', 'test')).toEqual('/test');
+    expect(generateSubmenuPath('GET /', 'test')).toEqual('GET /test/');
     expect(generateSubmenuPath('GET /producer/', 'products')).toEqual(
       'GET /producer/products/',
     );

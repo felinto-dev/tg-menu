@@ -54,11 +54,6 @@ export const generateSubmenuPath = (
   queryParams?: Record<string, string>,
 ) => {
   path = sanitizeMenuPath(path);
-
-  if (path === '/') {
-    return `/${submenu}`;
-  }
-
   path = path.replace(queryParametersRegex, path.endsWith('/') ? '' : '/');
 
   if (queryParams && Object.keys(queryParams).length > 0) {

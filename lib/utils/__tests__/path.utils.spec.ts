@@ -7,10 +7,11 @@ import {
 } from '../path.utils';
 
 describe(sanitizeMenuPath.name, () => {
-  it('should throws an error when have does not have slashes in beginner or end', () => {
-    expect(() => sanitizeMenuPath('producer/accounts')).toThrow();
-    expect(() => sanitizeMenuPath('/producer/accounts')).toThrow();
-    expect(() => sanitizeMenuPath('producer/accounts/')).toThrow();
+  it('should sanitize path slashes', () => {
+    const expected = '/producer/accounts/';
+    expect(sanitizeMenuPath('producer/accounts')).toEqual(expected);
+    expect(sanitizeMenuPath('/producer/accounts')).toEqual(expected);
+    expect(sanitizeMenuPath('producer/accounts/')).toEqual(expected);
   });
 
   it('should throw an error when path is invalid', () => {

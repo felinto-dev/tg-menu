@@ -1,7 +1,7 @@
 import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
-import { generatePathSubmenu } from '../utils/path.utils';
+import { generateSubmenuPath } from '../utils/path.utils';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
@@ -49,7 +49,7 @@ export class MenuHelper {
   }
 
   async submenu(text: string, submenuPath = 'null') {
-    submenuPath = generatePathSubmenu(this.path, submenuPath);
+    submenuPath = generateSubmenuPath(this.path, submenuPath);
 
     if (submenuPath.length > MAX_ALLOWED_CALLBACK_DATA) {
       return this.buildButton({

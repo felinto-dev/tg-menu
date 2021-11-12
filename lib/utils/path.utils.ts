@@ -4,6 +4,12 @@ import { pathToRegexp, match } from 'path-to-regexp';
 const queryParametersRegex = /(\?|&)([^=]+)=([^&/]+)/g;
 
 export const sanitizeMenuPath = (path: string) => {
+  Object.keys(RequestMethod)
+    .filter((k) => Number.isNaN(+k))
+    .forEach((requestMethod) => {
+      path = path.replace(`${requestMethod} `, '');
+    });
+
   if (!path.startsWith('/')) {
     path = `/${path}`;
   }
@@ -41,12 +47,14 @@ export const parsePath = (path: string, callback: string) => ({
   ),
 });
 
-export const generatePathSubmenu = (
+export const generateSubmenuPath = (
   path: string,
   submenu: string,
   action = RequestMethod.GET,
   queryParams?: Record<string, string>,
 ) => {
+  path = sanitizeMenuPath(path);
+
   if (path === '/') {
     return `/${submenu}`;
   }

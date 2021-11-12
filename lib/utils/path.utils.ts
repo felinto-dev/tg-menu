@@ -5,7 +5,7 @@ const queryParametersRegex = /(\?|&)([^=]+)=([^&/]+)/g;
 
 export const sanitizeMenuPath = (path: string) => {
   if (!path.startsWith('/') || !path.endsWith('/')) {
-    throw new Error("Paths should to start and ends with '/' (slash)");
+    throw new Error("Pats should start and ends with '/' (slash)");
   }
 
   if (path.match(/\/\//)) {
@@ -33,3 +33,22 @@ export const parsePath = (path: string, callback: string) => ({
     new URLSearchParams(callback.match(queryParametersRegex)?.join('')),
   ),
 });
+
+export const generatePathSubmenu = (
+  path: string,
+  submenu: string,
+  action = RequestMethod.GET,
+  queryParams?: Record<string, string>,
+) => {
+  if (path === '/') {
+    return `/${submenu}`;
+  }
+
+  path = path.replace(queryParametersRegex, path.endsWith('/') ? '' : '/');
+
+  if (queryParams && Object.keys(queryParams).length > 0) {
+    const queries = `?${new URLSearchParams(queryParams).toString()}`;
+    return `${RequestMethod[action]} ${path}${submenu}${queries}/`;
+  }
+  return `${RequestMethod[action]} ${path}${submenu}/`;
+};

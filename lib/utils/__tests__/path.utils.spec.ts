@@ -1,5 +1,10 @@
 import { RequestMethod } from '@nestjs/common';
-import { pathToRegex, parsePath, sanitizeMenuPath } from '../path.utils';
+import {
+  pathToRegex,
+  parsePath,
+  sanitizeMenuPath,
+  generatePathSubmenu,
+} from '../path.utils';
 
 describe(sanitizeMenuPath.name, () => {
   it('should throws an error when have does not have slashes in beginner or end', () => {
@@ -100,5 +105,41 @@ describe(parsePath.name, () => {
         groupId: '456',
       },
     });
+  });
+});
+
+describe(generatePathSubmenu.name, () => {
+  it('generate submenu path', () => {
+    expect(generatePathSubmenu('/', 'test')).toEqual('/test');
+    expect(generatePathSubmenu('/producer/', 'products')).toEqual(
+      'GET /producer/products/',
+    );
+    expect(generatePathSubmenu('/producer?page=1', 'products')).toEqual(
+      'GET /producer/products/',
+    );
+    expect(generatePathSubmenu('/producer?page=1/', 'products')).toEqual(
+      'GET /producer/products/',
+    );
+  });
+
+  it('should does not populate query parameters when extra params is an empty object', () => {
+    expect(
+      generatePathSubmenu('/producer/', 'products', RequestMethod.GET, {}),
+    ).toEqual('GET /producer/products/');
+  });
+
+  it('generate submenu path with query parameters', () => {
+    expect(
+      generatePathSubmenu('/producer/', 'products', RequestMethod.GET, {
+        page: '2',
+        sortBy: 'downloads',
+      }),
+    ).toEqual('GET /producer/products?page=2&sortBy=downloads/');
+  });
+
+  it('generate submenu path with custom request method', () => {
+    expect(
+      generatePathSubmenu('/producer/', 'products', RequestMethod.POST),
+    ).toEqual('POST /producer/products/');
   });
 });

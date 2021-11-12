@@ -24,6 +24,7 @@ describe(pathToRegex.name, () => {
     expect('POST /producer/products/').not.toMatch(
       pathToRegex(RequestMethod.GET, '/producer/products/'),
     );
+    expect('GET /').toMatch(pathToRegex(RequestMethod.GET, '/'));
   });
 
   it('should match callback with path parameters', () => {

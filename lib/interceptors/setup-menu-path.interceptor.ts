@@ -10,8 +10,8 @@ import { TelegrafExecutionContext } from 'nestjs-telegraf';
 import { deunionize } from 'telegraf';
 import { tap } from 'rxjs/operators';
 
+import { parsePath } from '../utils/path.utils';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
-import { MenuPathParser } from '../helpers/menu-path-parser.helper';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { MenuHelper } from '../helpers/menu.helper';
@@ -25,7 +25,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler) {
-    const menuPath = this.reflector.get<MenuPathParser>(
+    const menuPath = this.reflector.get<string>(
       'menuPath',
       context.getHandler(),
     );
@@ -39,11 +39,11 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
 
     if (ctx.callbackQuery) {
       const callbackQuery = deunionize(ctx.callbackQuery).data;
-      menuPath.path = callbackQuery;
-      ctx.query = menuPath.parse(callbackQuery).query;
-      ctx.params = menuPath.parse(callbackQuery).params;
+      ctx.query = parsePath(menuPath, callbackQuery).query;
+      ctx.params = parsePath(menuPath, callbackQuery).params;
     } else {
-      menuPath.path = menuPath.template;
+      ctx.query = {};
+      ctx.params = {};
     }
 
     ctx.menu = new MenuHelper(
@@ -51,7 +51,6 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       this.telegramPaginationService,
       this.temporaryCallbackService,
     );
-    ctx.menu.setupParser(menuPath);
     return next.handle().pipe(
       tap(() => {
         if (requestMethod === RequestMethod.GET) {

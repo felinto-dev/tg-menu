@@ -1,1 +1,1 @@
-export * from './temporary-callback.middleware';
+export * from './tg-menu.middleware';

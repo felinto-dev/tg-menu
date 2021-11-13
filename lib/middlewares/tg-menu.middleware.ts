@@ -5,7 +5,7 @@ import { TemporaryCallbackService } from '../services/temporary-callback.service
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 
 @Injectable()
-export class TemporaryCallbackMiddleware {
+export class TGMenuMiddleware {
   constructor(
     private readonly temporaryCallbackService: TemporaryCallbackService,
   ) {}

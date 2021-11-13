@@ -14,7 +14,7 @@ describe(generateSubmenuPath.name, () => {
   });
 
   it('should generate submenu path from another submenu with query parameters', () => {
-    expect(generateSubmenuPath('GET /producer?page=1/', 'products')).toEqual(
+    expect(generateSubmenuPath('GET /producer/?page=1/', 'products')).toEqual(
       'GET /producer/products/',
     );
   });

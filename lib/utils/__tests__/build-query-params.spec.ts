@@ -17,4 +17,12 @@ describe(buildQueryParams.name, () => {
       }),
     ).toEqual('GET /producer/accounts/?page=1&sortBy=downloads/');
   });
+
+  it('should remove query parameters', () => {
+    expect(
+      buildQueryParams('GET /producer/accounts/?page=1/', {
+        page: '1',
+      }),
+    ).toEqual('GET /producer/accounts/?page=1/');
+  });
 });

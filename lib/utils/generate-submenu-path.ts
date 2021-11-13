@@ -1,6 +1,6 @@
 import { RequestMethod } from '@nestjs/common';
 
-import { QUERY_PARAMETERS_REGEX } from '../consts/regex-library';
+import { buildQueryParams, removeQueryParams } from './build-query-params';
 import { sanitizeMenuPath } from './sanitize-menu-path';
 
 export const generateSubmenuPath = (
@@ -10,11 +10,13 @@ export const generateSubmenuPath = (
   queryParams?: Record<string, string>,
 ) => {
   path = sanitizeMenuPath(path);
-  path = path.replace(new RegExp(`${QUERY_PARAMETERS_REGEX.source}/$`), '/');
+  path = removeQueryParams(path);
 
   if (queryParams && Object.keys(queryParams).length > 0) {
-    const queries = `/?${new URLSearchParams(queryParams).toString()}`;
-    return `${RequestMethod[action]} ${path}${submenu}${queries}/`;
+    return buildQueryParams(
+      `${RequestMethod[action]} ${path}${submenu}/`,
+      queryParams,
+    );
   }
   return `${RequestMethod[action]} ${path}${submenu}/`;
 };

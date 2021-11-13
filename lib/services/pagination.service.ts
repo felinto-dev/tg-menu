@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InlineKeyboardButton } from 'typegram';
 import * as paginationLogic from 'pagination-logic';
 
+import { buildQueryParams } from 'lib/utils/build-query-params';
 import { MAX_ALLOWED_CALLBACK_DATA } from '../consts';
 import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
 import { TemporaryCallbackService } from './temporary-callback.service';
@@ -33,7 +34,9 @@ export class PaginationTelegramService {
       pageSize,
       currentPage,
       pageLinkRule: async (pageNumber: number) => {
-        const callbackData = `${endpoint}/?page=${pageNumber}/`;
+        const callbackData = buildQueryParams(endpoint, {
+          page: String(pageNumber),
+        });
 
         if (callbackData.length > MAX_ALLOWED_CALLBACK_DATA) {
           return this.temporaryCallbackQueryService.setCallback(callbackData);

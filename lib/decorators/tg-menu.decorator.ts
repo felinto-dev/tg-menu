@@ -10,12 +10,15 @@ import { SetupMenuPathInterceptor } from '../interceptors/setup-menu-path.interc
 import { pathToRegex } from '../utils/path-to-regex';
 import { sanitizeMenuPath } from '../utils/sanitize-menu-path';
 
-export const TGMenu = (requestMethod: RequestMethod, path = '/') => {
+export const TGMenu = (
+  requestMethod: keyof typeof RequestMethod,
+  path = '/',
+) => {
   path = sanitizeMenuPath(path);
 
   return applyDecorators(
     SetMetadata('requestMethod', requestMethod),
-    SetMetadata('menuPath', `${RequestMethod[requestMethod]} ${path}`),
+    SetMetadata('menuPath', `${requestMethod} ${path}`),
     Action(pathToRegex(requestMethod, path)),
     UseInterceptors(SetupMenuPathInterceptor),
   );

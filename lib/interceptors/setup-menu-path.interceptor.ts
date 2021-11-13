@@ -29,7 +29,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       'menuPath',
       context.getHandler(),
     );
-    const requestMethod = this.reflector.get<RequestMethod>(
+    const requestMethod = this.reflector.get<keyof typeof RequestMethod>(
       'requestMethod',
       context.getHandler(),
     );
@@ -54,7 +54,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
     );
     return next.handle().pipe(
       tap(() => {
-        if (requestMethod === RequestMethod.GET) {
+        if (requestMethod === 'GET') {
           ctx.menu.showMenu();
         }
       }),

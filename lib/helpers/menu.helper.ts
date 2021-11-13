@@ -102,7 +102,7 @@ export class MenuHelper {
   }
 
   async showMenu() {
-    this.setupBackHomeButton();
+    // this.setupBackHomeButton(); // TODO: Should enable after setup business logic
     this.showMenuNumbers();
     await this.ctx.replyWithHTML(this.header, {
       reply_markup: {

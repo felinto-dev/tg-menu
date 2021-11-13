@@ -1,6 +1,7 @@
 import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
+import { RequestMethod } from '@nestjs/common';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
@@ -48,8 +49,12 @@ export class MenuHelper {
     this.items.push(...rows);
   }
 
-  async submenu(text: string, submenuPath = 'null') {
-    submenuPath = generateSubmenuPath(this.path, submenuPath);
+  async submenu(
+    text: string,
+    submenuPath = 'null',
+    action?: keyof typeof RequestMethod,
+  ) {
+    submenuPath = generateSubmenuPath(this.path, submenuPath, action);
 
     if (submenuPath.length > MAX_ALLOWED_CALLBACK_DATA) {
       return this.buildButton({

@@ -1,6 +1,10 @@
 import { InlineKeyboardButton } from 'typegram';
 
+import { sanitizeMenuPath } from './sanitize-menu-path';
+
 const getUpperMenu = (path: string) => {
+  path = sanitizeMenuPath(path);
+
   // hack for convert "/producer/accounts" to "/producer"
   while (path.charAt(path.length - 1) !== '/') {
     path = path.slice(0, -1);
@@ -21,9 +25,9 @@ export const backHomeButtonHelper = (
   if (currentMenuPath && currentMenuPath !== '/') {
     keyboard.push({
       text: '#️⃣ Voltar',
-      callback_data: getUpperMenu(currentMenuPath),
+      callback_data: `GET ${getUpperMenu(currentMenuPath)}`,
     });
-    keyboard.push({ text: '🏠 Menu Principal', callback_data: '/' });
+    keyboard.push({ text: '🏠 Menu Principal', callback_data: 'GET /' });
   }
 
   return keyboard;

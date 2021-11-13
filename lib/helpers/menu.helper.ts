@@ -2,11 +2,11 @@ import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
 import { RequestMethod } from '@nestjs/common';
+import { backHomeButtonHelper } from 'lib/utils/back-home-button.utils';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
-import { backHomeButtonHelper } from './back-home-button.helper';
 import { MAX_ALLOWED_CALLBACK_DATA } from '../consts';
 import { generateSubmenuPath } from '../utils/generate-submenu-path';
 

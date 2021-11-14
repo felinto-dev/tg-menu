@@ -12,11 +12,12 @@ export class MenuHistoryService {
   }
 
   async back(ctx: TGMenuContext) {
-    const callbackQuery = objectPath.del(
+    const callbackQueries = objectPath.get(
       ctx.session,
       TG_MENU_NAVIGATION_HISTORY,
-    );
-    ctx.callbackQuery['data'] = callbackQuery;
+    ) as Array<string>;
+    callbackQueries.pop(); // get the current menu
+    ctx.callbackQuery['data'] = callbackQueries.pop(); // get the back menu
   }
 
   async get(ctx: TGMenuContext) {

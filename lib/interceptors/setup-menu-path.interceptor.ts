@@ -15,6 +15,7 @@ import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { MenuHelper } from '../helpers/menu.helper';
 import { parsePath } from '../utils/parse-path';
+import { MenuHistoryService } from '../services/menu-history.service';
 
 @Injectable()
 export class SetupMenuPathInterceptor implements NestInterceptor {
@@ -22,6 +23,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
     private readonly reflector: Reflector,
     private readonly telegramPaginationService: PaginationTelegramService,
     private readonly temporaryCallbackService: TemporaryCallbackService,
+    private readonly menuHistoryService: MenuHistoryService,
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler) {
@@ -50,6 +52,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       ctx,
       this.telegramPaginationService,
       this.temporaryCallbackService,
+      this.menuHistoryService,
       ctx.callbackQuery ? deunionize(ctx.callbackQuery).data : menuPath,
     );
     return next.handle().pipe(

@@ -2,9 +2,12 @@
 import { deunionize } from 'telegraf';
 import { Injectable } from '@nestjs/common';
 
+import { isContainsQueryParams } from 'lib/utils/build-query-params';
+import { isContainsPathParameters } from 'lib/utils/path-to-regex';
 import { MenuHistoryService } from '../services/menu-history.service';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
+import { TG_MENU_BACK_BUTTON } from '../consts';
 
 @Injectable()
 export class TGMenuMiddleware {
@@ -32,7 +35,7 @@ export class TGMenuMiddleware {
     if (isCallbackQuery) {
       await this.processTemporaryCallbackQuery(ctx);
 
-      if (deunionize(ctx.callbackQuery).data === '__TG_MENU_back_button') {
+      if (deunionize(ctx.callbackQuery).data === TG_MENU_BACK_BUTTON) {
         await this.menuHistoryService.back(ctx);
       }
     }
@@ -42,10 +45,19 @@ export class TGMenuMiddleware {
     const isUserInHomePage =
       isCallbackQuery && deunionize(ctx.callbackQuery).data === 'GET /';
 
-    if (isUserInHomePage || isCommand) {
+    if (isUserInHomePage) {
       await this.menuHistoryService.clear(ctx);
-    } else if (isCallbackQuery) {
-      await this.menuHistoryService.add(ctx, ctx.callbackQuery['data']);
+    } else if (
+      isCallbackQuery &&
+      !isContainsQueryParams(deunionize(ctx.callbackQuery).data)
+    ) {
+      await this.menuHistoryService.add(
+        ctx,
+        deunionize(ctx.callbackQuery).data,
+      );
+    } else if (isCommand && !isContainsPathParameters(ctx.menu.path)) {
+      await this.menuHistoryService.clear(ctx);
+      await this.menuHistoryService.add(ctx, ctx.menu.path);
     }
   };
 }

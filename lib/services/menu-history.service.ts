@@ -11,12 +11,22 @@ export class MenuHistoryService {
     objectPath.push(ctx.session, TG_MENU_NAVIGATION_HISTORY, callbackData);
   }
 
-  async backMenu(ctx: TGMenuContext) {
+  async back(ctx: TGMenuContext) {
     const callbackQuery = objectPath.del(
       ctx.session,
       TG_MENU_NAVIGATION_HISTORY,
     );
     ctx.callbackQuery['data'] = callbackQuery;
+  }
+
+  async get(ctx: TGMenuContext) {
+    const history = objectPath.get(ctx.session, TG_MENU_NAVIGATION_HISTORY);
+
+    if (history && history.length >= 1) {
+      return history[(history as Array<string>).length - 1];
+    }
+
+    return null;
   }
 
   async clear(ctx: TGMenuContext) {

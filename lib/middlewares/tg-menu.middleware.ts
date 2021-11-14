@@ -33,7 +33,7 @@ export class TGMenuMiddleware {
       await this.processTemporaryCallbackQuery(ctx);
 
       if (deunionize(ctx.callbackQuery).data === '__TG_MENU_back_button') {
-        await this.menuHistoryService.backMenu(ctx);
+        await this.menuHistoryService.back(ctx);
       }
     }
 

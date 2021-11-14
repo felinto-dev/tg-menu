@@ -1,5 +1,3 @@
-import { RequestMethod } from '@nestjs/common';
-
 import { generateSubmenuPath } from '../generate-submenu-path';
 
 describe(generateSubmenuPath.name, () => {
@@ -21,13 +19,13 @@ describe(generateSubmenuPath.name, () => {
 
   it('should does not populate query parameters when extra params is an empty object', () => {
     expect(
-      generateSubmenuPath('GET /producer/', 'products', RequestMethod.GET, {}),
+      generateSubmenuPath('GET /producer/', 'products', 'GET', {}),
     ).toEqual('GET /producer/products/');
   });
 
   it('generate submenu path with query parameters', () => {
     expect(
-      generateSubmenuPath('GET /producer/', 'products', RequestMethod.GET, {
+      generateSubmenuPath('GET /producer/', 'products', 'GET', {
         page: '2',
         sortBy: 'downloads',
       }),
@@ -35,8 +33,8 @@ describe(generateSubmenuPath.name, () => {
   });
 
   it('generate submenu path with custom request method', () => {
-    expect(
-      generateSubmenuPath('GET /producer/', 'products', RequestMethod.POST),
-    ).toEqual('POST /producer/products/');
+    expect(generateSubmenuPath('GET /producer/', 'products', 'POST')).toEqual(
+      'POST /producer/products/',
+    );
   });
 });

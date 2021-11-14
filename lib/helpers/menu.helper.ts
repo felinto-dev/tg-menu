@@ -1,20 +1,22 @@
 import * as Numbers from 'number-to-emoji';
 import { InlineKeyboardButton } from 'typegram';
 
-import { generatePathSubmenu } from '../utils/path.utils';
+import { RequestMethod } from '@nestjs/common';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { TGMenuPagination } from '../interfaces/pagination-setup.interface';
-import { backHomeButtonHelper } from './back-home-button.helper';
-import { MAX_ALLOWED_CALLBACK_DATA } from '../consts';
+import { MAX_ALLOWED_CALLBACK_DATA, TG_MENU_BACK_BUTTON } from '../consts';
+import { generateSubmenuPath } from '../utils/generate-submenu-path';
+import { MenuHistoryService } from '../services/menu-history.service';
 
 export class MenuHelper {
   constructor(
     private readonly ctx: TGMenuContext,
     private readonly paginationService: PaginationTelegramService,
     private readonly temporaryCallbackService: TemporaryCallbackService,
-    private readonly path: string,
+    private readonly menuHistoryService: MenuHistoryService,
+    public readonly path: string,
   ) {}
 
   private header = '👇 Selecione uma das opções do menu abaixo:';
@@ -48,8 +50,12 @@ export class MenuHelper {
     this.items.push(...rows);
   }
 
-  async submenu(text: string, submenuPath = 'null') {
-    submenuPath = generatePathSubmenu(this.path, submenuPath);
+  async submenu(
+    text: string,
+    submenuPath = 'null',
+    action?: keyof typeof RequestMethod,
+  ) {
+    submenuPath = generateSubmenuPath(this.path, submenuPath, action);
 
     if (submenuPath.length > MAX_ALLOWED_CALLBACK_DATA) {
       return this.buildButton({
@@ -87,7 +93,25 @@ export class MenuHelper {
   }
 
   private async setupBackHomeButton() {
-    this.addRow(backHomeButtonHelper(this.path));
+    const navigationButtons: InlineKeyboardButton[] = [];
+
+    if (this.path === 'GET /') {
+      return;
+    }
+
+    if (await this.menuHistoryService.get(this.ctx)) {
+      navigationButtons.push({
+        text: '↖️#️⃣ Voltar',
+        callback_data: TG_MENU_BACK_BUTTON,
+      });
+    }
+
+    navigationButtons.push({
+      text: '🏠↗️ Menu Principal',
+      callback_data: 'GET /',
+    });
+
+    this.addRow(navigationButtons);
   }
 
   async setupPagination(params: TGMenuPagination) {
@@ -97,7 +121,7 @@ export class MenuHelper {
   }
 
   async showMenu() {
-    this.setupBackHomeButton();
+    this.setupBackHomeButton(); // TODO: Should enable after setup business logic
     this.showMenuNumbers();
     await this.ctx.replyWithHTML(this.header, {
       reply_markup: {

@@ -10,11 +10,12 @@ import { TelegrafExecutionContext } from 'nestjs-telegraf';
 import { deunionize } from 'telegraf';
 import { tap } from 'rxjs/operators';
 
-import { parsePath } from '../utils/path.utils';
 import { TemporaryCallbackService } from '../services/temporary-callback.service';
 import { TGMenuContext } from '../interfaces/telegraf-context.interface';
 import { PaginationTelegramService } from '../services/pagination.service';
 import { MenuHelper } from '../helpers/menu.helper';
+import { parsePath } from '../utils/parse-path';
+import { MenuHistoryService } from '../services/menu-history.service';
 
 @Injectable()
 export class SetupMenuPathInterceptor implements NestInterceptor {
@@ -22,6 +23,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
     private readonly reflector: Reflector,
     private readonly telegramPaginationService: PaginationTelegramService,
     private readonly temporaryCallbackService: TemporaryCallbackService,
+    private readonly menuHistoryService: MenuHistoryService,
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler) {
@@ -29,7 +31,7 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       'menuPath',
       context.getHandler(),
     );
-    const requestMethod = this.reflector.get<RequestMethod>(
+    const requestMethod = this.reflector.get<keyof typeof RequestMethod>(
       'requestMethod',
       context.getHandler(),
     );
@@ -50,11 +52,12 @@ export class SetupMenuPathInterceptor implements NestInterceptor {
       ctx,
       this.telegramPaginationService,
       this.temporaryCallbackService,
+      this.menuHistoryService,
       ctx.callbackQuery ? deunionize(ctx.callbackQuery).data : menuPath,
     );
     return next.handle().pipe(
       tap(() => {
-        if (requestMethod === RequestMethod.GET) {
+        if (requestMethod === 'GET') {
           ctx.menu.showMenu();
         }
       }),

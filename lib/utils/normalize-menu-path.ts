@@ -1,6 +1,6 @@
 import { RequestMethod } from '@nestjs/common';
 
-export const sanitizeMenuPath = (path: string) => {
+export const normalizeMenuPath = (path: string) => {
   Object.keys(RequestMethod)
     .filter((k) => Number.isNaN(+k))
     .forEach((requestMethod) => {

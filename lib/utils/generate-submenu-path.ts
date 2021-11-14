@@ -1,5 +1,5 @@
 import { buildQueryParams, removeQueryParams } from './build-query-params';
-import { sanitizeMenuPath } from './sanitize-menu-path';
+import { normalizeMenuPath } from './normalize-menu-path';
 
 export const generateSubmenuPath = (
   path: string,
@@ -7,7 +7,7 @@ export const generateSubmenuPath = (
   action = 'GET',
   queryParams?: Record<string, string>,
 ) => {
-  path = sanitizeMenuPath(path);
+  path = normalizeMenuPath(path);
   path = removeQueryParams(path);
 
   if (queryParams && Object.keys(queryParams).length > 0) {

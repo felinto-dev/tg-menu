@@ -8,13 +8,13 @@ import {
 
 import { SetupMenuPathInterceptor } from '../interceptors/setup-menu-path.interceptor';
 import { pathToRegex } from '../utils/path-to-regex';
-import { sanitizeMenuPath } from '../utils/sanitize-menu-path';
+import { normalizeMenuPath } from '../utils/normalize-menu-path';
 
 export const TGMenu = (
   requestMethod: keyof typeof RequestMethod,
   path = '/',
 ) => {
-  path = sanitizeMenuPath(path);
+  path = normalizeMenuPath(path);
 
   return applyDecorators(
     SetMetadata('requestMethod', requestMethod),

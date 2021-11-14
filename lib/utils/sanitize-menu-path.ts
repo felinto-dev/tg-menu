@@ -15,9 +15,5 @@ export const sanitizeMenuPath = (path: string) => {
     path = `${path}/`;
   }
 
-  if (path.match(/\/\//)) {
-    throw new Error('Paths cannot to have double slash');
-  }
-
-  return path;
+  return decodeURI(path).replace(/\/+/g, '/').normalize();
 };

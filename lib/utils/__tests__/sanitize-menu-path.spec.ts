@@ -8,7 +8,9 @@ describe(sanitizeMenuPath.name, () => {
     expect(sanitizeMenuPath('producer/accounts/')).toEqual(expected);
   });
 
-  it('should throw an error when path is invalid', () => {
-    expect(() => sanitizeMenuPath('producer//accounts')).toThrowError();
+  it('should normalize when path has double slash ("/")', () => {
+    expect(sanitizeMenuPath('producer//accounts')).toEqual(
+      '/producer/accounts/',
+    );
   });
 });

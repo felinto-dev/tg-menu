@@ -14,9 +14,9 @@ export class TGMenuMiddleware {
   ) {}
 
   async processTemporaryCallbackQuery(ctx: TGMenuContext) {
-    if (ctx.callbackQuery?.['data']?.match(/\b[A-Fa-f0-9]{64}\b/)) {
+    if (deunionize(ctx.callbackQuery).data.match(/\b[A-Fa-f0-9]{64}\b/)) {
       ctx.callbackQuery['data'] = await this.cbService.getCallback(
-        ctx.callbackQuery['data'],
+        deunionize(ctx.callbackQuery).data,
       );
     }
   }
@@ -40,7 +40,7 @@ export class TGMenuMiddleware {
     await next();
 
     const isUserInHomePage =
-      isCallbackQuery && ctx.callbackQuery['data'] === 'GET /';
+      isCallbackQuery && deunionize(ctx.callbackQuery).data === 'GET /';
 
     if (isUserInHomePage || isCommand) {
       await this.menuHistoryService.clear(ctx);
